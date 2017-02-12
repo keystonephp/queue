@@ -11,9 +11,19 @@ Supported queue services:
 
 Features:
 
-* Compatible with any queueing service via a common interface.
+* Compatible with any queueing service via provider/publisher interfaces.
 * Middleware to hook into the processing flow (inspired by [PSR-15](https://github.com/php-fig/fig-standards/tree/master/proposed/http-middleware)).
+* Route task messages to workers registered as services in [PSR-11](https://github.com/container-interop/fig-standards/blob/master/proposed/container.md)/Symfony containers.
+
+Middleware:
+
+* Automatically close timed out Doctrine DBAL connections.
+* Automatically clear the Doctrine ORM managers to free memory.
+* Limit the maximum execution time of the consumer.
+* Limit the maximum number of messages a consumer will process.
+* Limit the maximum amount of memory a consumer is allowed to use.
 * Retry failed tasks using an exponential backoff strategy.
+* Handle signals to terminate the consumer process safely.
 
 ## Installation
 
