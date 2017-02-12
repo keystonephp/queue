@@ -6,6 +6,7 @@ namespace Keystone\Queue\Driver\Sqs\Middleware;
 
 use Exception;
 use Keystone\Queue\Delegate;
+use Keystone\Queue\Driver\Sqs\SqsDriver;
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Message;
 use Keystone\Queue\Message\RetryableMessage;
