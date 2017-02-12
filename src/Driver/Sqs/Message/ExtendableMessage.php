@@ -8,5 +8,5 @@ use Keystone\Queue\Message;
 
 interface ExtendableMessage extends Message
 {
-    public function getVisibilityTimeout();
+    public function getVisibilityTimeout(): int;
 }

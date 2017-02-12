@@ -13,20 +13,26 @@ use Keystone\Queue\Middleware;
 
 class ExtendVisibilityTimeoutMiddleware implements Middleware
 {
+    /**
+     * @var SqsDriver
+     */
     private $driver;
 
+    /**
+     * @param SqsDriver $driver
+     */
     public function __construct(SqsDriver $driver)
     {
         $this->driver = $driver;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function process(Envelope $envelope, Delegate $delegate): bool
     {
         if ($envelope->getMessage() instanceof ExtendableMessage) {
-            // Increase visibility timeout based on the message configuration
-            // Only increase if queue timeout is lower
-
-            // $this->driver->extendVisibilityTimeout($message->getVisibilityTimeout());
+            $this->driver->changeVisibility($envelope, $envelope->getMessage()->getVisibilityTimeout());
         }
 
         return $delegate->process($envelope);
