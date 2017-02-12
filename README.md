@@ -22,6 +22,8 @@ composer require keystone/queue
 Create the message class for a task.
 
 ```php
+use Keystone\Queue\Message;
+
 class TestMessage implements Message
 {
     public $name;
