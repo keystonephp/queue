@@ -1,20 +1,25 @@
 {
+    "name": "keystone/queue",
+    "description": "Create and process background jobs with any queueing service",
+    "keywords": ["queue", "worker", "rabbitmq", "amqp", "sqs"],
+    "type": "library",
+    "license": "MIT",
     "require": {
         "aws/aws-sdk-php": "^3.22",
-        "psr/log": "^1.0",
-        "beberlei/assert": "^2.7"
+        "beberlei/assert": "^2.7",
+        "psr/log": "^1.0"
     },
     "require-dev": {
+        "doctrine/common": "^2.7",
+        "doctrine/dbal": "^2.5",
+        "mockery/mockery": "^0.9.8",
         "monolog/monolog": "^1.22",
+        "phpstan/phpstan": "^0.6.3",
+        "phpunit/phpunit": "^5.0",
         "psr/container": "dev-master",
         "symfony/dependency-injection": "^3.2",
-        "doctrine/dbal": "^2.5",
-        "doctrine/common": "^2.7",
-        "phpunit/phpunit": "^5.0",
-        "mockery/mockery": "^0.9.8",
-        "symfony/serializer": "^3.2",
         "symfony/property-access": "^3.2",
-        "phpstan/phpstan": "^0.6.3"
+        "symfony/serializer": "^3.2"
     },
     "autoload": {
         "psr-4": {
