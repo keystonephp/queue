@@ -79,3 +79,7 @@ Consume the messages in a long running process.
 ```php
 $consumer->consume();
 ```
+
+## Credits
+
+Inspired by Sidekiq, Bernard and Swarrot.
