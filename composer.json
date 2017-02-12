@@ -1,0 +1,29 @@
+{
+    "require": {
+        "aws/aws-sdk-php": "^3.22",
+        "psr/log": "^1.0",
+        "beberlei/assert": "^2.7"
+    },
+    "require-dev": {
+        "monolog/monolog": "^1.22",
+        "psr/container": "dev-master",
+        "symfony/dependency-injection": "^3.2",
+        "doctrine/dbal": "^2.5",
+        "doctrine/common": "^2.7",
+        "phpunit/phpunit": "^5.0",
+        "mockery/mockery": "^0.9.8",
+        "symfony/serializer": "^3.2",
+        "symfony/property-access": "^3.2",
+        "phpstan/phpstan": "^0.6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Keystone\\Queue\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Keystone\\Queue\\": "tests/"
+        }
+    }
+}
