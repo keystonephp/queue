@@ -9,6 +9,12 @@ Supported queue services:
 * [x] [AWS SQS](https://aws.amazon.com/sqs)
 * [ ] [RabbitMQ](https://www.rabbitmq.com)
 
+Features:
+
+* Compatible with any queueing service via a common interface.
+* Middleware to hook into the processing flow (inspired by [PSR-15](https://github.com/php-fig/fig-standards/tree/master/proposed/http-middleware)).
+* Retry failed tasks using an exponential backoff strategy.
+
 ## Installation
 
 Install via Composer
