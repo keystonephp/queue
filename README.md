@@ -25,43 +25,43 @@ Middleware:
 * Retry failed tasks using an exponential backoff strategy.
 * Handle signals to terminate the consumer process safely.
 
-## Installation
+## Getting started
 
-Install via Composer
+Install the library with Composer.
 
 ```bash
 composer require keystone/queue
 ```
 
-## Usage
-
-Create the message class for a task.
+Create a message class for the task.
 
 ```php
 use Keystone\Queue\Message;
 
-class TestMessage implements Message
+class HardMessage implements Message
 {
     public $name;
+    public $count;
 
-    public function __construct(name)
+    public function __construct(string $name, int $count = 5)
     {
         $this->name = $name;
+        $this->count = $count;
     }
 
     public function getKey(): string
     {
-        return 'test';
+        return 'hard';
     }
 }
 ```
 
-Create the worker class.
+Create a worker class capable of processing the message.
 
 ```php
-class TestWorker
+class HardWorker
 {
-    public function process(TestMessage $message)
+    public function process(HardMessage $message)
     {
         // Do some work to process the message.
     }
@@ -71,12 +71,20 @@ class TestWorker
 Publish a message within your application.
 
 ```php
-$publisher->publish(new TestMessage('Billy'));
+use Keystone\Queue\Publisher;
+
+$publisher = new Publisher(...);
+$publisher->publish(new HardMessage('Billy', 12));
 ```
 
 Consume the messages in a long running process.
 
 ```php
+use Keystone\Queue\Consumer;
+use Keystone\Queue\Provider;
+
+$provider = new Provider(...);
+$consumer = new Consumer($provider, ...);
 $consumer->consume();
 ```
 
