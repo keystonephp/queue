@@ -55,6 +55,7 @@ class HardMessage implements Message
 
     public function getKey(): string
     {
+        // The message key is used to determine which queue to publish to.
         return 'hard';
     }
 }
@@ -78,6 +79,7 @@ Publish a message within your application.
 use Keystone\Queue\Publisher;
 
 $publisher = new Publisher(...);
+// The message is serialized when publishing and unserialized when consuming
 $publisher->publish(new HardMessage('Billy', 12));
 ```
 
@@ -89,6 +91,7 @@ use Keystone\Queue\Provider;
 
 $provider = new Provider(...);
 $consumer = new Consumer($provider, ...);
+// The consumer will poll the queue for new messages and process them.
 $consumer->consume();
 ```
 
