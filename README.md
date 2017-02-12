@@ -27,7 +27,7 @@ Middleware:
 
 ## Requirements
 
-PHP 7.0 and above are required.
+PHP 7.0 and above is required.
 
 ## Getting started
 
