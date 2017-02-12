@@ -25,6 +25,10 @@ Middleware:
 * Retry failed tasks using an exponential backoff strategy.
 * Handle signals to terminate the consumer process safely.
 
+## Requirements
+
+PHP 7.0 and above are required.
+
 ## Getting started
 
 Install the library with Composer.
