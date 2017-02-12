@@ -52,5 +52,19 @@ class TestWorker
 Publish the message.
 
 ```php
+$publisher = new SqsDriver();
 $publisher->publish(new TestMessage('Billy'));
+```
+
+Consume the message.
+
+```php
+$provider = new SqsDriver();
+$worker = new TestWorker();
+$router = new ArrayRouter([
+    TestMessage::class => $worker,
+]);
+
+$consumer = new Consumer($provider, $router, new NullLogger(), [], 10);
+$consumer->consume();
 ```
