@@ -82,4 +82,11 @@ $consumer->consume();
 
 ## Credits
 
-Inspired by Sidekiq, Bernard and Swarrot.
+- [Tom Graham](https://github.com/tompedals)
+- [Mike Perham](https://github.com/mperham) for his work on [Sidekiq](https://github.com/mperham/sidekiq)
+- [Henrik Bjørnskov](https://github.com/henrikbjorn) for his work on [Bernard](https://github.com/bernardphp/bernard)
+- [Olivier Dolbeau](https://github.com/odolbeau) for his work on [Swarrot](https://github.com/swarrot/swarrot)
+
+## License
+
+Released under the MIT Licence. See the bundled LICENSE file for details.
