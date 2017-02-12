@@ -19,7 +19,7 @@ composer require keystone/queue
 
 ## Usage
 
-Define the task message.
+Create the message class for a task.
 
 ```php
 class TestMessage implements Message
@@ -45,26 +45,19 @@ class TestWorker
 {
     public function process(TestMessage $message)
     {
+        // Do some work to process the message.
     }
 }
 ```
 
-Publish the message.
+Publish a message within your application.
 
 ```php
-$publisher = new SqsDriver();
 $publisher->publish(new TestMessage('Billy'));
 ```
 
-Consume the message.
+Consume the messages in a long running process.
 
 ```php
-$provider = new SqsDriver();
-$worker = new TestWorker();
-$router = new ArrayRouter([
-    TestMessage::class => $worker,
-]);
-
-$consumer = new Consumer($provider, $router, new NullLogger(), [], 10);
 $consumer->consume();
 ```
