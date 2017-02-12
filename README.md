@@ -2,7 +2,7 @@
 
 A PHP library to create and process background jobs with any queueing service.
 
-Queuing service drivers:
+Supported queue services:
 
-* [x] [AWS SQS](https://aws.amazon.com/sqs/)
-* [ ] AMQP protocol ([RabbitMQ](https://www.rabbitmq.com/))
+* [x] [AWS SQS](https://aws.amazon.com/sqs)
+* [ ] [RabbitMQ](https://www.rabbitmq.com)
