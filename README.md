@@ -40,8 +40,6 @@ composer require keystone/queue
 Create a message class for the task.
 
 ```php
-<?php
-
 use Keystone\Queue\Message;
 
 class HardMessage implements Message
@@ -49,7 +47,7 @@ class HardMessage implements Message
     public $name;
     public $count;
 
-    public function __construct(string $name, int $count = 5)
+    public function __construct(string $name, int $count)
     {
         $this->name = $name;
         $this->count = $count;
@@ -65,8 +63,6 @@ class HardMessage implements Message
 Create a worker class capable of processing the message.
 
 ```php
-<?php
-
 class HardWorker
 {
     public function process(HardMessage $message)
@@ -79,8 +75,6 @@ class HardWorker
 Publish a message within your application.
 
 ```php
-<?php
-
 use Keystone\Queue\Publisher;
 
 $publisher = new Publisher(...);
@@ -90,8 +84,6 @@ $publisher->publish(new HardMessage('Billy', 12));
 Consume the messages in a long running process.
 
 ```php
-<?php
-
 use Keystone\Queue\Consumer;
 use Keystone\Queue\Provider;
 
