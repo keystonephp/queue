@@ -82,7 +82,7 @@ $consumer->consume();
 
 ## Credits
 
-- [Tom Graham](https://github.com/tompedals)
+- [Tom Graham](https://github.com/tompedals) (maintainer)
 - [Mike Perham](https://github.com/mperham) for his work on [Sidekiq](https://github.com/mperham/sidekiq)
 - [Henrik Bjørnskov](https://github.com/henrikbjorn) for his work on [Bernard](https://github.com/bernardphp/bernard)
 - [Olivier Dolbeau](https://github.com/odolbeau) for his work on [Swarrot](https://github.com/swarrot/swarrot)
