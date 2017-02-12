@@ -1,10 +1,11 @@
 {
     "name": "keystone/queue",
-    "description": "Create and process background jobs with any queueing service",
+    "description": "Create and process background tasks with any queueing service",
     "keywords": ["queue", "worker", "rabbitmq", "amqp", "sqs"],
     "type": "library",
     "license": "MIT",
     "require": {
+        "php": ">=7.0",
         "aws/aws-sdk-php": "^3.22",
         "beberlei/assert": "^2.7",
         "psr/log": "^1.0"
