@@ -31,4 +31,15 @@ class SimpleRouterTest extends TestCase
 
         $router->map($envelope);
     }
+
+    public function testCanAddWorker()
+    {
+        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+
+        $worker = Mockery::mock();
+        $router = new SimpleRouter();
+        $router->add(SimpleMessage::class, $worker);
+
+        $this->assertSame($worker, $router->map($envelope));
+    }
 }
