@@ -11,7 +11,7 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Message;
 use Keystone\Queue\Message\RetryableMessage;
 use Keystone\Queue\Middleware;
-use Keystone\Queue\Retry\RetryStategy;
+use Keystone\Queue\Retry\RetryStrategy;
 use Throwable;
 
 /**
@@ -31,15 +31,15 @@ class RetryMiddleware implements Middleware
     private $driver;
 
     /**
-     * @var RetryStategy
+     * @var RetryStrategy
      */
     private $strategy;
 
     /**
      * @param SqsDriver $driver
-     * @param RetryStategy $strategy
+     * @param RetryStrategy $strategy
      */
-    public function __construct(SqsDriver $driver, RetryStategy $strategy)
+    public function __construct(SqsDriver $driver, RetryStrategy $strategy)
     {
         $this->driver = $driver;
         $this->strategy = $strategy;
@@ -78,7 +78,7 @@ class RetryMiddleware implements Middleware
     private function extendVisibility(Envelope $envelope)
     {
         // The maximum visibility timeout for SQS is 12 hours
-        $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $this->strategy->getDelay($envelope->getAttempts()));
+        $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $this->strategy->getDelay(1));
         $this->driver->changeVisibility($envelope, $visibilityTimeout);
 
         // Mark the message as requeued so it is not deleted
