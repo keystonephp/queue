@@ -7,9 +7,11 @@ namespace Keystone\Queue;
 interface Provider
 {
     /**
+     * @param string $queueName
+     *
      * @return Envelope|null
      */
-    public function receive();
+    public function receive(string $queueName);
 
     /**
      * @param Envelope $envelope

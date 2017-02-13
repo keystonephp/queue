@@ -13,16 +13,16 @@ class ArrayProviderTest extends TestCase
     public function testReceive()
     {
         $envelopes = [
-            new Envelope(new PlainMessage('key', 'body')),
-            new Envelope(new PlainMessage('key', 'body')),
-            new Envelope(new PlainMessage('key', 'body')),
+            new Envelope('test', new PlainMessage('key', 'body')),
+            new Envelope('test', new PlainMessage('key', 'body')),
+            new Envelope('test', new PlainMessage('key', 'body')),
         ];
 
         $provider = new ArrayProvider($envelopes);
 
-        $this->assertSame($envelopes[0], $provider->receive());
-        $this->assertSame($envelopes[1], $provider->receive());
-        $this->assertSame($envelopes[2], $provider->receive());
-        $this->assertNull($provider->receive());
+        $this->assertSame($envelopes[0], $provider->receive('test'));
+        $this->assertSame($envelopes[1], $provider->receive('test'));
+        $this->assertSame($envelopes[2], $provider->receive('test'));
+        $this->assertNull($provider->receive('test'));
     }
 }

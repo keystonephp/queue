@@ -33,6 +33,11 @@ class Consumer
     private $middlewares;
 
     /**
+     * @var string
+     */
+    private $queueName;
+
+    /**
      * The polling interval in seconds.
      *
      * @var int
@@ -44,6 +49,7 @@ class Consumer
      * @param Router $router
      * @param LoggerInterface $logger
      * @param Middleware[] $middlewares
+     * @param string $queueName
      * @param int $interval
      */
     public function __construct(
@@ -51,12 +57,14 @@ class Consumer
         Router $router,
         LoggerInterface $logger,
         array $middlewares,
+        string $queueName,
         int $interval
     ) {
         $this->provider = $provider;
         $this->router = $router;
         $this->logger = $logger;
         $this->middlewares = $middlewares;
+        $this->queueName = $queueName;
         $this->interval = $interval;
     }
 
@@ -101,7 +109,7 @@ class Consumer
      */
     private function process(): bool
     {
-        while (($envelope = $this->provider->receive()) !== null) {
+        while (($envelope = $this->provider->receive($this->queueName)) !== null) {
             try {
                 $delegate = new Delegate($this->router->map($envelope), $this->middlewares);
                 $result = $delegate->process($envelope);

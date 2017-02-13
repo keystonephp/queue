@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Keystone\Queue\Driver\Sqs;
 
 use Aws\Sqs\SqsClient;
+use InvalidArgumentException;
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Exception\MalformedMessageException;
 use Keystone\Queue\Message;
+use Keystone\Queue\Message\PrefetchMessageCache;
 use Keystone\Queue\Provider;
 use Keystone\Queue\Publisher;
 use Keystone\Queue\Serializer;
 use Psr\Log\LoggerInterface;
-use SplQueue;
 
 class SqsDriver implements Provider, Publisher
 {
@@ -32,19 +33,14 @@ class SqsDriver implements Provider, Publisher
     private $logger;
 
     /**
-     * @var string
-     */
-    private $queueName;
-
-    /**
-     * @var string
-     */
-    private $queueUrl;
-
-    /**
-     * @var SplQueue
+     * @var PrefetchMessageCache
      */
     private $cache;
+
+    /**
+     * @var array
+     */
+    private $queueUrls = [];
 
     /**
      * @var int
@@ -62,15 +58,14 @@ class SqsDriver implements Provider, Publisher
      * @param LoggerInterface $logger
      * @param string $queueName
      */
-    public function __construct(SqsClient $client, Serializer $serializer, LoggerInterface $logger, string $queueName)
+    public function __construct(SqsClient $client, Serializer $serializer, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->logger = $logger;
-        $this->queueName = $queueName;
 
         // Create the cache for prefetched messages
-        $this->cache = new SplQueue();
+        $this->cache = new PrefetchMessageCache();
     }
 
     /**
@@ -81,6 +76,7 @@ class SqsDriver implements Provider, Publisher
         $this->logger->debug('Sending message');
 
         $this->client->sendMessage([
+            // The message key is the queue name for SQS
             'QueueUrl' => $this->getQueueUrl($message->getKey()),
             'MessageBody' => $this->serializer->serialize($message),
         ]);
@@ -89,15 +85,16 @@ class SqsDriver implements Provider, Publisher
     /**
      * {@inheritdoc}
      */
-    public function receive()
+    public function receive(string $queueName)
     {
-        if (!$this->cache->isEmpty()) {
-            return $this->cache->dequeue();
+        $envelope = $this->cache->pop($queueName);
+        if ($envelope !== null) {
+            return $envelope;
         }
 
         $this->logger->debug('Receiving messages');
         $result = $this->client->receiveMessage([
-            'QueueUrl' => $this->getQueueUrl(),
+            'QueueUrl' => $this->getQueueUrl($queueName),
             'MaxNumberOfMessages' => $this->prefetch,
             'WaitTimeSeconds' => $this->waitTime,
         ]);
@@ -112,10 +109,10 @@ class SqsDriver implements Provider, Publisher
         }
 
         foreach ($messages as $message) {
-            $this->cache->enqueue($this->createEnvelope($message));
+            $this->cache->push($this->createEnvelope($queueName, $message));
         }
 
-        return $this->cache->dequeue();
+        return $this->cache->pop($queueName);
     }
 
     /**
@@ -125,7 +122,7 @@ class SqsDriver implements Provider, Publisher
     {
         $this->logger->debug('Acknowledging message');
         $this->client->deleteMessage([
-            'QueueUrl' => $this->getQueueUrl(),
+            'QueueUrl' => $this->getQueueUrl($envelope->getQueueName()),
             'ReceiptHandle' => $envelope->getReceipt(),
         ]);
     }
@@ -138,7 +135,7 @@ class SqsDriver implements Provider, Publisher
         if (!$envelope->isRequeued()) {
             $this->logger->debug('Negatively acknowleged message');
             $this->client->deleteMessage([
-                'QueueUrl' => $this->getQueueUrl(),
+                'QueueUrl' => $this->getQueueUrl($envelope->getQueueName()),
                 'ReceiptHandle' => $envelope->getReceipt(),
             ]);
         } else {
@@ -153,43 +150,55 @@ class SqsDriver implements Provider, Publisher
     public function changeVisibility(Envelope $envelope, int $visibilityTimeout)
     {
         $this->client->changeMessageVisibility([
-            'QueueUrl' => $this->getQueueUrl(),
+            'QueueUrl' => $this->getQueueUrl($envelope->getQueueName()),
             'ReceiptHandle' => $envelope->getReceipt(),
             'VisibilityTimeout' => $visibilityTimeout,
         ]);
     }
 
     /**
+     * @param string $queueName
      * @param array $result
+     *
      * @return Envelope
      */
-    private function createEnvelope($result): Envelope
+    private function createEnvelope(string $queueName, $result): Envelope
     {
         try {
             $message = $this->serializer->unserialize($result['Body']);
 
-            return new Envelope($message, $result['ReceiptHandle']);
+            return new Envelope($queueName, $message, $result['ReceiptHandle']);
         } catch (MalformedMessageException $exception) {
             $this->logger->warning('Unable to unserialize the message', [
-                'queue' => $this->getQueueUrl(),
+                'queue' => $queueName,
                 'message' => $result['Body'],
             ]);
         }
     }
 
     /**
+     * @param string $queueName
+     *
      * @return string
+     *
+     * @throws InvalidArgumentException When the queue URL cannot be retrieved
      */
-    private function getQueueUrl(): string
+    private function getQueueUrl(string $queueName): string
     {
-        if ($this->queueUrl === null) {
-            $result = $this->client->getQueueUrl([
-                'QueueName' => $this->queueName,
-            ]);
+        if (!array_key_exists($queueName, $this->queueUrls)) {
+            $result = $this->client->getQueueUrl(['QueueName' => $queueName]);
+            if ($result) {
+                $queueUrl = $result->get('QueueUrl');
+                if (!$queueUrl) {
+                    throw new InvalidArgumentException(
+                        sprintf('The queue "%s" does not exist', $queueName)
+                    );
+                }
+            }
 
-            $this->queueUrl = $result->get('QueueUrl');
+            $this->queueUrls[$queueName] = $queueUrl;
         }
 
-        return $this->queueUrl;
+        return $this->queueUrls[$queueName];
     }
 }

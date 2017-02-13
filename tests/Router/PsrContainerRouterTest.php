@@ -22,7 +22,7 @@ class PsrContainerRouterTest extends TestCase
 
     public function testMapReturnsWorker()
     {
-        $envelope = new Envelope(new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
         $router = new PsrContainerRouter([PlainMessage::class => 'worker'], $this->container);
 
         $this->container->shouldReceive('has')
@@ -41,7 +41,7 @@ class PsrContainerRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope(new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
         $router = new PsrContainerRouter([], $this->container);
 
         $router->map($envelope);
@@ -51,7 +51,7 @@ class PsrContainerRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope(new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
         $router = new PsrContainerRouter([PlainMessage::class => 'worker'], $this->container);
 
         $this->container->shouldReceive('has')

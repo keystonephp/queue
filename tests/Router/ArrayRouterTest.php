@@ -14,7 +14,7 @@ class ArrayRouterTest extends TestCase
 {
     public function testMapReturnsWorker()
     {
-        $envelope = new Envelope(new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
 
         $worker = Mockery::mock();
         $router = new ArrayRouter([PlainMessage::class => $worker]);
@@ -26,7 +26,7 @@ class ArrayRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope(new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
         $router = new ArrayRouter([]);
 
         $router->map($envelope);

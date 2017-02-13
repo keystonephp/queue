@@ -35,7 +35,7 @@ class ArrayProvider implements Provider
     /**
      * {@inheritdoc}
      */
-    public function receive()
+    public function receive(string $queueName)
     {
         if (!$this->envelopes->isEmpty()) {
             return $this->envelopes->dequeue();

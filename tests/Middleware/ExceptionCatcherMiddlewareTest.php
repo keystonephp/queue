@@ -24,7 +24,7 @@ class ExceptionCatcherMiddlewareTest extends TestCase
 
     public function testCatchesExceptions()
     {
-        $envelope = new Envelope(new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {
@@ -36,7 +36,7 @@ class ExceptionCatcherMiddlewareTest extends TestCase
 
     public function testCatchesThrowables()
     {
-        $envelope = new Envelope(new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {

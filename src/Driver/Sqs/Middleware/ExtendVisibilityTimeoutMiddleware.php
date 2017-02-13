@@ -8,7 +8,6 @@ use Keystone\Queue\Delegate;
 use Keystone\Queue\Driver\Sqs\Message\ExtendableMessage;
 use Keystone\Queue\Driver\Sqs\SqsDriver;
 use Keystone\Queue\Envelope;
-use Keystone\Queue\Message;
 use Keystone\Queue\Middleware;
 
 /**

@@ -31,15 +31,15 @@ class ConsumerTest extends TestCase
         $logger = new NullLogger();
 
         $provider = new ArrayProvider([
-            new Envelope($message1),
-            new Envelope($message2),
+            new Envelope('test', $message1),
+            new Envelope('test', $message2),
         ]);
 
         $router = new ArrayRouter([
             PlainMessage::class => $worker,
         ]);
 
-        $consumer = new Consumer($provider, $router, $logger, [new MaxMessagesMiddleware($logger, 2)], 1);
+        $consumer = new Consumer($provider, $router, $logger, [new MaxMessagesMiddleware($logger, 2)], 'test', 1);
         $consumer->consume();
     }
 }

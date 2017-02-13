@@ -23,7 +23,7 @@ class MaxMessagesMiddlewareTest extends TestCase
 
     public function testBelowMaxMessagesLimit()
     {
-        $envelope = new Envelope(new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $this->assertTrue($this->middleware->process($envelope, $delegate));
@@ -31,7 +31,7 @@ class MaxMessagesMiddlewareTest extends TestCase
 
     public function testExceededMaxMessagesLimit()
     {
-        $envelope = new Envelope(new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $this->assertTrue($this->middleware->process($envelope, $delegate));

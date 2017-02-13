@@ -7,6 +7,11 @@ namespace Keystone\Queue;
 class Envelope
 {
     /**
+     * @var string
+     */
+    private $queueName;
+
+    /**
      * @var Message
      */
     private $message;
@@ -22,13 +27,23 @@ class Envelope
     private $requeued = false;
 
     /**
+     * @param string $queueName
      * @param Message $message
      * @param string $receipt
      */
-    public function __construct(Message $message, string $receipt = '')
+    public function __construct(string $queueName, Message $message, string $receipt = '')
     {
+        $this->queueName = $queueName;
         $this->message = $message;
         $this->receipt = $receipt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQueueName(): string
+    {
+        return $this->queueName;
     }
 
     /**

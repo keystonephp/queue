@@ -21,7 +21,7 @@ use Throwable;
 class RetryMiddleware implements Middleware
 {
     /**
-     * The maximum visibility timeout (12 hours)
+     * The maximum visibility timeout (12 hours).
      */
     const MAX_VISIBILITY_TIMEOUT = 43200;
 
@@ -78,6 +78,7 @@ class RetryMiddleware implements Middleware
     private function extendVisibility(Envelope $envelope)
     {
         // The maximum visibility timeout for SQS is 12 hours
+        // TODO: Adjust the delay based on the current visibility timeout
         $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $this->strategy->getDelay(1));
         $this->driver->changeVisibility($envelope, $visibilityTimeout);
 

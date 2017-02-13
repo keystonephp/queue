@@ -12,7 +12,7 @@ use Keystone\Queue\Middleware;
 interface SleepyMiddleware extends Middleware
 {
     /**
-     * @return bool Whether to terminate the consumer process.
+     * @return bool whether to terminate the consumer process
      */
     public function sleep(): bool;
 }
