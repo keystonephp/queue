@@ -11,6 +11,9 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Message;
 use Keystone\Queue\Middleware;
 
+/**
+ * Middleware to extend a messages visibility timeout.
+ */
 class ExtendVisibilityTimeoutMiddleware implements Middleware
 {
     /**

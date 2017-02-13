@@ -9,10 +9,19 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Provider;
 use SplQueue;
 
+/**
+ * A fake provider that will return the provided message envelopes.
+ */
 class ArrayProvider implements Provider
 {
+    /**
+     * @var Envelope[]
+     */
     private $envelopes;
 
+    /**
+     * @param Envelope[]
+     */
     public function __construct(array $envelopes)
     {
         Assertion::allIsInstanceOf($envelopes, Envelope::class);
@@ -23,6 +32,9 @@ class ArrayProvider implements Provider
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function receive()
     {
         if (!$this->envelopes->isEmpty()) {
@@ -30,11 +42,19 @@ class ArrayProvider implements Provider
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function ack(Envelope $envelope)
     {
+        // Do nothing
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function nack(Envelope $envelope)
     {
+        // Do nothing
     }
 }

@@ -9,6 +9,9 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Middleware;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Middleware to limit the maximum execution time of a consumer process before terminating.
+ */
 class MaxExecutionTimeMiddleware implements Middleware, InitializableMiddleware, SleepyMiddleware
 {
     /**

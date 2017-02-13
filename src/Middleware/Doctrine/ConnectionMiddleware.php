@@ -12,6 +12,9 @@ use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Middleware;
 
+/**
+ * Middleware to close timed out connections so they can be re-opened when used in a worker.
+ */
 class ConnectionMiddleware implements Middleware
 {
     /**

@@ -10,6 +10,9 @@ use Keystone\Queue\Middleware;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
+/**
+ * Middleware to handle signals.
+ */
 class SignalHandlerMiddleware implements Middleware, InitializableMiddleware
 {
     /**

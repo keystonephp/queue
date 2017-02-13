@@ -14,8 +14,17 @@ use Keystone\Queue\Middleware;
 use Keystone\Queue\Retry\RetryStategy;
 use Throwable;
 
+/**
+ * Middleware to requeue the message to be retried again after some time has passed. The amount
+ * of time to delay is determined by the retry strategy.
+ */
 class RetryMiddleware implements Middleware
 {
+    /**
+     * The maximum visibility timeout (12 hours)
+     */
+    const MAX_VISIBILITY_TIMEOUT = 43200;
+
     /**
      * @var SqsDriver
      */
@@ -69,7 +78,7 @@ class RetryMiddleware implements Middleware
     private function extendVisibility(Envelope $envelope)
     {
         // The maximum visibility timeout for SQS is 12 hours
-        $visibilityTimeout = min(43200, $this->strategy->getDelay($envelope->getAttempts()));
+        $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $this->strategy->getDelay($envelope->getAttempts()));
         $this->driver->changeVisibility($envelope, $visibilityTimeout);
 
         // Mark the message as requeued so it is not deleted

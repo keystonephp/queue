@@ -12,6 +12,9 @@ use Keystone\Queue\Provider;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+/**
+ * Middleware to acknowledge messages.
+ */
 class AckMiddleware implements Middleware
 {
     /**

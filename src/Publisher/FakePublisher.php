@@ -7,6 +7,9 @@ namespace Keystone\Queue\Publisher;
 use Keystone\Queue\Message;
 use Keystone\Queue\Publisher;
 
+/**
+ * A fake publisher that will record published messages.
+ */
 class FakePublisher implements Publisher
 {
     /**

@@ -47,6 +47,9 @@ class Envelope
         return $this->receipt;
     }
 
+    /**
+     * Marks the message as being requeued.
+     */
     public function requeue()
     {
         $this->requeued = true;

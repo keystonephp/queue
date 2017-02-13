@@ -11,6 +11,10 @@ use Keystone\Queue\Middleware;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
+/**
+ * Middleware to catch exceptions and throwable errors. This will prevent the consumer process
+ * from crashing and allow the next message to be processed.
+ */
 class ExceptionCatcherMiddleware implements Middleware
 {
     /**

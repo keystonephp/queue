@@ -9,6 +9,9 @@ use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Middleware;
 
+/**
+ * Middleware to reset and clear the object manager, which should free up memory after processing each message.
+ */
 class ObjectManagerMiddleware implements Middleware
 {
     /**

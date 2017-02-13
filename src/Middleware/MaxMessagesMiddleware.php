@@ -9,6 +9,9 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Middleware;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Middleware to limit the maximum number of messages a consumer will process before terminating.
+ */
 class MaxMessagesMiddleware implements Middleware
 {
     /**
