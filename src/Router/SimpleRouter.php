@@ -18,9 +18,18 @@ class SimpleRouter implements Router
     /**
      * @param object[] $workers
      */
-    public function __construct(array $workers)
+    public function __construct(array $workers = [])
     {
         $this->workers = $workers;
+    }
+
+    /**
+     * @param string $messageName
+     * @param object $worker
+     */
+    public function add(string $messageName, $worker)
+    {
+        $this->workers[$messageName] = $worker;
     }
 
     /**
