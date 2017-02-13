@@ -31,8 +31,8 @@ class ConsumerTest extends TestCase
         $logger = new NullLogger();
 
         $provider = new FakeProvider([
-            new Envelope('test', $message1),
-            new Envelope('test', $message2),
+            new Envelope('test', 'receipt', $message1),
+            new Envelope('test', 'receipt', $message2),
         ]);
 
         $router = new SimpleRouter([

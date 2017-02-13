@@ -14,7 +14,7 @@ class SimpleRouterTest extends TestCase
 {
     public function testMapReturnsWorker()
     {
-        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('test', 'body'));
 
         $worker = Mockery::mock();
         $router = new SimpleRouter([SimpleMessage::class => $worker]);
@@ -26,7 +26,7 @@ class SimpleRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('test', 'body'));
         $router = new SimpleRouter([]);
 
         $router->map($envelope);
@@ -34,7 +34,7 @@ class SimpleRouterTest extends TestCase
 
     public function testCanAddWorker()
     {
-        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('test', 'body'));
 
         $worker = Mockery::mock();
         $router = new SimpleRouter();

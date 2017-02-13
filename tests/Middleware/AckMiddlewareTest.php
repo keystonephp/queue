@@ -28,7 +28,7 @@ class AckMiddlewareTest extends TestCase
 
     public function testAcksEnvelope()
     {
-        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturn(true);
@@ -44,7 +44,7 @@ class AckMiddlewareTest extends TestCase
     {
         $this->setExpectedException(Exception::class);
 
-        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {
@@ -62,7 +62,7 @@ class AckMiddlewareTest extends TestCase
     {
         $this->setExpectedException(Throwable::class);
 
-        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {

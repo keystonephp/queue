@@ -13,9 +13,9 @@ class FakeProviderTest extends TestCase
     public function testReceive()
     {
         $envelopes = [
-            new Envelope('test', new SimpleMessage('key', 'body')),
-            new Envelope('test', new SimpleMessage('key', 'body')),
-            new Envelope('test', new SimpleMessage('key', 'body')),
+            new Envelope('test', 'receipt', new SimpleMessage('key', 'body')),
+            new Envelope('test', 'receipt', new SimpleMessage('key', 'body')),
+            new Envelope('test', 'receipt', new SimpleMessage('key', 'body')),
         ];
 
         $provider = new FakeProvider($envelopes);

@@ -12,14 +12,14 @@ class Envelope
     private $queueName;
 
     /**
-     * @var Message
-     */
-    private $message;
-
-    /**
      * @var string
      */
     private $receipt;
+
+    /**
+     * @var Message
+     */
+    private $message;
 
     /**
      * @var bool
@@ -28,14 +28,14 @@ class Envelope
 
     /**
      * @param string $queueName
-     * @param Message $message
      * @param string $receipt
+     * @param Message $message
      */
-    public function __construct(string $queueName, Message $message, string $receipt = '')
+    public function __construct(string $queueName, string $receipt, Message $message)
     {
         $this->queueName = $queueName;
-        $this->message = $message;
         $this->receipt = $receipt;
+        $this->message = $message;
     }
 
     /**
@@ -47,19 +47,19 @@ class Envelope
     }
 
     /**
-     * @return Message
-     */
-    public function getMessage(): Message
-    {
-        return $this->message;
-    }
-
-    /**
      * @return string
      */
     public function getReceipt()
     {
         return $this->receipt;
+    }
+
+    /**
+     * @return Message
+     */
+    public function getMessage(): Message
+    {
+        return $this->message;
     }
 
     /**

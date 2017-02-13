@@ -167,7 +167,7 @@ class SqsDriver implements Provider, Publisher
         try {
             $message = $this->serializer->unserialize($result['Body']);
 
-            return new Envelope($queueName, $message, $result['ReceiptHandle']);
+            return new Envelope($queueName, $result['ReceiptHandle'], $message);
         } catch (MalformedMessageException $exception) {
             $this->logger->warning('Unable to unserialize the message', [
                 'queue' => $queueName,

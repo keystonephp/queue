@@ -22,7 +22,7 @@ class SymfonyContainerRouterTest extends TestCase
 
     public function testMapReturnsWorker()
     {
-        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('test', 'body'));
         $router = new SymfonyContainerRouter([SimpleMessage::class => 'worker'], $this->container);
 
         $this->container->shouldReceive('has')
@@ -41,7 +41,7 @@ class SymfonyContainerRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('test', 'body'));
         $router = new SymfonyContainerRouter([], $this->container);
 
         $router->map($envelope);
@@ -51,7 +51,7 @@ class SymfonyContainerRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('test', 'body'));
         $router = new SymfonyContainerRouter([SimpleMessage::class => 'worker'], $this->container);
 
         $this->container->shouldReceive('has')

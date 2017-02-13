@@ -16,7 +16,7 @@ class MaxExecutionTimeMiddlewareTest extends TestCase
 {
     public function testBelowTimeLimit()
     {
-        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $middleware = new MaxExecutionTimeMiddleware(new NullLogger(), 10);
@@ -28,7 +28,7 @@ class MaxExecutionTimeMiddlewareTest extends TestCase
 
     public function testExceededTimeLimit()
     {
-        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
+        $envelope = new Envelope('test', 'receipt', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $middleware = new MaxExecutionTimeMiddleware(new NullLogger(), 0.1);
