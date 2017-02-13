@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Keystone\Queue\Publisher;
 
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use PHPUnit\Framework\TestCase;
 
 class NullPublisherTest extends TestCase
@@ -14,6 +14,6 @@ class NullPublisherTest extends TestCase
         $publisher = new NullPublisher();
 
         // Ensure we can publish without errors
-        $publisher->publish(new PlainMessage('key', 'body'));
+        $publisher->publish(new SimpleMessage('key', 'body'));
     }
 }

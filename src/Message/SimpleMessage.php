@@ -6,7 +6,7 @@ namespace Keystone\Queue\Message;
 
 use Keystone\Queue\Message;
 
-class PlainMessage implements Message
+class SimpleMessage implements Message
 {
     /**
      * @var string

@@ -7,7 +7,7 @@ namespace Keystone\Queue\Middleware;
 use Exception;
 use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class ExceptionCatcherMiddlewareTest extends TestCase
 
     public function testCatchesExceptions()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {
@@ -36,7 +36,7 @@ class ExceptionCatcherMiddlewareTest extends TestCase
 
     public function testCatchesThrowables()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {

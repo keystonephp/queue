@@ -6,7 +6,7 @@ namespace Keystone\Queue\Middleware;
 
 use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ class MaxMessagesMiddlewareTest extends TestCase
 
     public function testBelowMaxMessagesLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $this->assertTrue($this->middleware->process($envelope, $delegate));
@@ -31,7 +31,7 @@ class MaxMessagesMiddlewareTest extends TestCase
 
     public function testExceededMaxMessagesLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $this->assertTrue($this->middleware->process($envelope, $delegate));

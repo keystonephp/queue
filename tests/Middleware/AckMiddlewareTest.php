@@ -7,7 +7,7 @@ namespace Keystone\Queue\Middleware;
 use Exception;
 use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware;
 use Keystone\Queue\Provider;
 use Mockery;
@@ -28,7 +28,7 @@ class AckMiddlewareTest extends TestCase
 
     public function testAcksEnvelope()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturn(true);
@@ -44,7 +44,7 @@ class AckMiddlewareTest extends TestCase
     {
         $this->setExpectedException(Exception::class);
 
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {
@@ -62,7 +62,7 @@ class AckMiddlewareTest extends TestCase
     {
         $this->setExpectedException(Throwable::class);
 
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class);
         $delegate->shouldReceive('process')
             ->andReturnUsing(function () {

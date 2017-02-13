@@ -6,18 +6,18 @@ namespace Keystone\Queue\Router;
 
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Exception\RoutingException;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class ArrayRouterTest extends TestCase
+class SimpleRouterTest extends TestCase
 {
     public function testMapReturnsWorker()
     {
-        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
 
         $worker = Mockery::mock();
-        $router = new ArrayRouter([PlainMessage::class => $worker]);
+        $router = new SimpleRouter([SimpleMessage::class => $worker]);
 
         $this->assertSame($worker, $router->map($envelope));
     }
@@ -26,8 +26,8 @@ class ArrayRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
-        $router = new ArrayRouter([]);
+        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $router = new SimpleRouter([]);
 
         $router->map($envelope);
     }

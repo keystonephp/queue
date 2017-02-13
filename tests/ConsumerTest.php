@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Keystone\Queue;
 
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware\MaxMessagesMiddleware;
-use Keystone\Queue\Provider\ArrayProvider;
-use Keystone\Queue\Router\ArrayRouter;
+use Keystone\Queue\Provider\FakeProvider;
+use Keystone\Queue\Router\SimpleRouter;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -18,25 +18,25 @@ class ConsumerTest extends TestCase
     {
         $worker = Mockery::mock();
 
-        $message1 = new PlainMessage('test', 1);
+        $message1 = new SimpleMessage('test', 1);
         $worker->shouldReceive('process')
             ->once()
             ->with($message1);
 
-        $message2 = new PlainMessage('test', 2);
+        $message2 = new SimpleMessage('test', 2);
         $worker->shouldReceive('process')
             ->once()
             ->with($message2);
 
         $logger = new NullLogger();
 
-        $provider = new ArrayProvider([
+        $provider = new FakeProvider([
             new Envelope('test', $message1),
             new Envelope('test', $message2),
         ]);
 
-        $router = new ArrayRouter([
-            PlainMessage::class => $worker,
+        $router = new SimpleRouter([
+            SimpleMessage::class => $worker,
         ]);
 
         $consumer = new Consumer($provider, $router, $logger, [new MaxMessagesMiddleware($logger, 2)], 'test', 1);

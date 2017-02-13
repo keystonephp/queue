@@ -12,7 +12,7 @@ use SplQueue;
 /**
  * A fake provider that will return the provided message envelopes.
  */
-class ArrayProvider implements Provider
+class FakeProvider implements Provider
 {
     /**
      * @var Envelope[]

@@ -6,7 +6,7 @@ namespace Keystone\Queue\Middleware;
 
 use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ class MaxExecutionTimeMiddlewareTest extends TestCase
 {
     public function testBelowTimeLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $middleware = new MaxExecutionTimeMiddleware(new NullLogger(), 10);
@@ -28,7 +28,7 @@ class MaxExecutionTimeMiddlewareTest extends TestCase
 
     public function testExceededTimeLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         $middleware = new MaxExecutionTimeMiddleware(new NullLogger(), 0.1);

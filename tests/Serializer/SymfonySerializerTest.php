@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Keystone\Queue\Serializer;
 
 use Keystone\Queue\Message;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -18,7 +18,7 @@ class SymfonySerializerTest extends TestCase
         $symfonySerializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
         $serializer = new SymfonySerializer($symfonySerializer, 'json');
 
-        $message = new PlainMessage('test', 'body');
+        $message = new SimpleMessage('test', 'body');
         $serialized = $serializer->serialize($message);
         $unserialized = $serializer->unserialize($serialized);
 

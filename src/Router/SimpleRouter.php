@@ -8,7 +8,7 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Exception\RoutingException;
 use Keystone\Queue\Router;
 
-class ArrayRouter implements Router
+class SimpleRouter implements Router
 {
     /**
      * @var object[]

@@ -6,7 +6,7 @@ namespace Keystone\Queue\Middleware;
 
 use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -15,7 +15,7 @@ class MemoryLimitMiddlewareTest extends TestCase
 {
     public function testBelowMemoryLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         // The memory limit is more than the stubbed usage
@@ -26,7 +26,7 @@ class MemoryLimitMiddlewareTest extends TestCase
 
     public function testReachedMemoryLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         // The memory limit is the same as the stubbed usage
@@ -37,7 +37,7 @@ class MemoryLimitMiddlewareTest extends TestCase
 
     public function testExceededMemoryLimit()
     {
-        $envelope = new Envelope('test', new PlainMessage('key', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('key', 'body'));
         $delegate = Mockery::mock(Delegate::class, ['process' => true]);
 
         // The memory limit is lower than the stubbed usage

@@ -6,7 +6,7 @@ namespace Keystone\Queue\Router;
 
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Exception\RoutingException;
-use Keystone\Queue\Message\PlainMessage;
+use Keystone\Queue\Message\SimpleMessage;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,8 +22,8 @@ class SymfonyContainerRouterTest extends TestCase
 
     public function testMapReturnsWorker()
     {
-        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
-        $router = new SymfonyContainerRouter([PlainMessage::class => 'worker'], $this->container);
+        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $router = new SymfonyContainerRouter([SimpleMessage::class => 'worker'], $this->container);
 
         $this->container->shouldReceive('has')
             ->with('worker')
@@ -41,7 +41,7 @@ class SymfonyContainerRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
+        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
         $router = new SymfonyContainerRouter([], $this->container);
 
         $router->map($envelope);
@@ -51,8 +51,8 @@ class SymfonyContainerRouterTest extends TestCase
     {
         $this->setExpectedException(RoutingException::class);
 
-        $envelope = new Envelope('test', new PlainMessage('test', 'body'));
-        $router = new SymfonyContainerRouter([PlainMessage::class => 'worker'], $this->container);
+        $envelope = new Envelope('test', new SimpleMessage('test', 'body'));
+        $router = new SymfonyContainerRouter([SimpleMessage::class => 'worker'], $this->container);
 
         $this->container->shouldReceive('has')
             ->with('worker')
