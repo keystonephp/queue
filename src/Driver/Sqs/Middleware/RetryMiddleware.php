@@ -35,6 +35,8 @@ class RetryMiddleware implements Middleware
      */
     private $strategy;
 
+    private $startTime;
+
     /**
      * @param SqsDriver $driver
      * @param RetryStrategy $strategy
@@ -50,6 +52,8 @@ class RetryMiddleware implements Middleware
      */
     public function process(Envelope $envelope, Delegate $delegate): bool
     {
+        $this->startTime = time();
+
         try {
             return $delegate->process($envelope);
         } catch (Exception $exception) {
@@ -77,12 +81,14 @@ class RetryMiddleware implements Middleware
      */
     private function extendVisibility(Envelope $envelope)
     {
+        // Calculate the retry delay
         $delay = $this->strategy->getDelay($envelope->getAttempts());
 
-        // The maximum visibility timeout for SQS is 12 hours
-        // TODO: Adjust the delay based on the current visibility timeout
-        $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $delay);
-        $this->driver->changeVisibility($envelope, $visibilityTimeout);
+        // The maximum visibility timeout is 12 hours for the lifetime of the message
+        $maxVisibilityTimeout = (int) self::MAX_VISIBILITY_TIMEOUT - (time() - ($envelope->getFirstReceiveTimestamp() / 1000)) - 1;
+
+        // Change the visibility timeout for the message
+        $this->driver->changeVisibility($envelope, min($maxVisibilityTimeout, $delay));
 
         // Mark the message as requeued so it is not deleted
         $envelope->requeue();

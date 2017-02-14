@@ -97,7 +97,7 @@ class SqsDriver implements Provider, Publisher
             'QueueUrl' => $this->getQueueUrl($queueName),
             'MaxNumberOfMessages' => $this->prefetch,
             'WaitTimeSeconds' => $this->waitTime,
-            'AttributeNames' => ['ApproximateReceiveCount'],
+            'AttributeNames' => ['ApproximateReceiveCount', 'ApproximateFirstReceiveTimestamp'],
         ]);
 
         if (!$result) {

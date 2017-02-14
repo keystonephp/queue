@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Keystone\Queue\Driver\Sqs;
 
 use Keystone\Queue\Envelope;
+use Keystone\Queue\Message;
 
 class SqsEnvelope extends Envelope
 {
@@ -34,6 +35,16 @@ class SqsEnvelope extends Envelope
     public function getAttempts(): int
     {
         return (int) $this->getAttribute('ApproximateReceiveCount');
+    }
+
+    /**
+     * Returns the approximate first receive timestamp as epoch time in milliseconds.
+     *
+     * @return int
+     */
+    public function getFirstReceiveTimestamp(): int
+    {
+        return (int) $this->getAttribute('ApproximateFirstReceiveTimestamp');
     }
 
     /**
