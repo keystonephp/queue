@@ -123,6 +123,8 @@ class Consumer
                 }
             } catch (RoutingException $exception) {
                 $this->logger->critical(sprintf('Unable to route message "%s"', get_class($envelope->getMessage())));
+
+                // Negatively acknowledge the message as it cannot be processed
                 $this->provider->nack($envelope);
             }
         }

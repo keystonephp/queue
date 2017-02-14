@@ -49,7 +49,7 @@ class Envelope
     /**
      * @return string
      */
-    public function getReceipt()
+    public function getReceipt(): string
     {
         return $this->receipt;
     }
@@ -60,6 +60,14 @@ class Envelope
     public function getMessage(): Message
     {
         return $this->message;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAttempts(): int
+    {
+        return 1;
     }
 
     /**

@@ -97,6 +97,7 @@ class SqsDriver implements Provider, Publisher
             'QueueUrl' => $this->getQueueUrl($queueName),
             'MaxNumberOfMessages' => $this->prefetch,
             'WaitTimeSeconds' => $this->waitTime,
+            'AttributeNames' => ['ApproximateReceiveCount'],
         ]);
 
         if (!$result) {
@@ -109,7 +110,15 @@ class SqsDriver implements Provider, Publisher
         }
 
         foreach ($messages as $message) {
-            $this->cache->push($this->createEnvelope($queueName, $message));
+            try {
+                $this->cache->push($this->createEnvelope($queueName, $message));
+            } catch (MalformedMessageException $exception) {
+                // Ignore the malformed message but log the error
+                $this->logger->warning('Unable to unserialize the message', [
+                    'queue' => $queueName,
+                    'message' => $result['Body'],
+                ]);
+            }
         }
 
         return $this->cache->pop($queueName);
@@ -160,20 +169,13 @@ class SqsDriver implements Provider, Publisher
      * @param string $queueName
      * @param array $result
      *
-     * @return Envelope
+     * @return SqsEnvelope
      */
-    private function createEnvelope(string $queueName, $result): Envelope
+    private function createEnvelope(string $queueName, $result): SqsEnvelope
     {
-        try {
-            $message = $this->serializer->unserialize($result['Body']);
+        $message = $this->serializer->unserialize($result['Body']);
 
-            return new Envelope($queueName, $result['ReceiptHandle'], $message);
-        } catch (MalformedMessageException $exception) {
-            $this->logger->warning('Unable to unserialize the message', [
-                'queue' => $queueName,
-                'message' => $result['Body'],
-            ]);
-        }
+        return new SqsEnvelope($queueName, $result['ReceiptHandle'], $message, $result);
     }
 
     /**

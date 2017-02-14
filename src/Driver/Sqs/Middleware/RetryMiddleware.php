@@ -77,9 +77,11 @@ class RetryMiddleware implements Middleware
      */
     private function extendVisibility(Envelope $envelope)
     {
+        $delay = $this->strategy->getDelay($envelope->getAttempts());
+
         // The maximum visibility timeout for SQS is 12 hours
         // TODO: Adjust the delay based on the current visibility timeout
-        $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $this->strategy->getDelay(1));
+        $visibilityTimeout = min(static::MAX_VISIBILITY_TIMEOUT, $delay);
         $this->driver->changeVisibility($envelope, $visibilityTimeout);
 
         // Mark the message as requeued so it is not deleted
