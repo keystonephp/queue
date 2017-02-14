@@ -27,6 +27,10 @@ class IntervalRetryStrategy implements RetryStrategy
      */
     public function getDelay(int $attempts): int
     {
+        if ($attempts < 1) {
+            $attempts = 1;
+        }
+
         if (array_key_exists($attempts - 1, $this->intervals)) {
             return $this->intervals[$attempts - 1];
         }
