@@ -38,13 +38,13 @@ class SqsEnvelope extends Envelope
     }
 
     /**
-     * Returns the approximate first receive timestamp as epoch time in milliseconds.
+     * Returns the approximate first receive timestamp as epoch time in seconds.
      *
      * @return int
      */
     public function getFirstReceiveTimestamp(): int
     {
-        return (int) $this->getAttribute('ApproximateFirstReceiveTimestamp');
+        return (int) ($this->getAttribute('ApproximateFirstReceiveTimestamp') / 1000);
     }
 
     /**

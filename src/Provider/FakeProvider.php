@@ -15,7 +15,7 @@ use SplQueue;
 class FakeProvider implements Provider
 {
     /**
-     * @var Envelope[]
+     * @var SplQueue
      */
     private $envelopes;
 

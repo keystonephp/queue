@@ -77,7 +77,7 @@ class SqsDriver implements Provider, Publisher
 
         $this->client->sendMessage([
             // The message key is the queue name for SQS
-            'QueueUrl' => $this->getQueueUrl($message->getKey()),
+            'QueueUrl' => $this->resolveQueueUrl($message->getKey()),
             'MessageBody' => $this->serializer->serialize($message),
         ]);
     }
@@ -94,19 +94,19 @@ class SqsDriver implements Provider, Publisher
 
         $this->logger->debug('Receiving messages');
         $result = $this->client->receiveMessage([
-            'QueueUrl' => $this->getQueueUrl($queueName),
+            'QueueUrl' => $this->resolveQueueUrl($queueName),
             'MaxNumberOfMessages' => $this->prefetch,
             'WaitTimeSeconds' => $this->waitTime,
             'AttributeNames' => ['ApproximateReceiveCount', 'ApproximateFirstReceiveTimestamp'],
         ]);
 
         if (!$result) {
-            return;
+            return null;
         }
 
         $messages = $result->get('Messages');
         if ($messages === null) {
-            return;
+            return null;
         }
 
         foreach ($messages as $message) {
@@ -131,7 +131,7 @@ class SqsDriver implements Provider, Publisher
     {
         $this->logger->debug('Acknowledging message');
         $this->client->deleteMessage([
-            'QueueUrl' => $this->getQueueUrl($envelope->getQueueName()),
+            'QueueUrl' => $this->resolveQueueUrl($envelope->getQueueName()),
             'ReceiptHandle' => $envelope->getReceipt(),
         ]);
     }
@@ -144,7 +144,7 @@ class SqsDriver implements Provider, Publisher
         if (!$envelope->isRequeued()) {
             $this->logger->debug('Negatively acknowleged message');
             $this->client->deleteMessage([
-                'QueueUrl' => $this->getQueueUrl($envelope->getQueueName()),
+                'QueueUrl' => $this->resolveQueueUrl($envelope->getQueueName()),
                 'ReceiptHandle' => $envelope->getReceipt(),
             ]);
         } else {
@@ -159,7 +159,7 @@ class SqsDriver implements Provider, Publisher
     public function changeVisibility(Envelope $envelope, int $visibilityTimeout)
     {
         $this->client->changeMessageVisibility([
-            'QueueUrl' => $this->getQueueUrl($envelope->getQueueName()),
+            'QueueUrl' => $this->resolveQueueUrl($envelope->getQueueName()),
             'ReceiptHandle' => $envelope->getReceipt(),
             'VisibilityTimeout' => $visibilityTimeout,
         ]);
@@ -182,25 +182,34 @@ class SqsDriver implements Provider, Publisher
      * @param string $queueName
      *
      * @return string
+     */
+    private function resolveQueueUrl(string $queueName): string
+    {
+        if (!array_key_exists($queueName, $this->queueUrls)) {
+            $this->queueUrls[$queueName] = $this->getQueueUrl($queueName);
+        }
+
+        return $this->queueUrls[$queueName];
+    }
+
+    /**
+     * @param string $queueName
+     *
+     * @return string
      *
      * @throws InvalidArgumentException When the queue URL cannot be retrieved
      */
     private function getQueueUrl(string $queueName): string
     {
-        if (!array_key_exists($queueName, $this->queueUrls)) {
-            $result = $this->client->getQueueUrl(['QueueName' => $queueName]);
-            if ($result) {
-                $queueUrl = $result->get('QueueUrl');
-                if (!$queueUrl) {
-                    throw new InvalidArgumentException(
-                        sprintf('The queue "%s" does not exist', $queueName)
-                    );
-                }
+        $result = $this->client->getQueueUrl(['QueueName' => $queueName]);
+        if ($result) {
+            $queueUrl = $result->get('QueueUrl');
+            if ($queueUrl) {
+                return $queueUrl;
             }
-
-            $this->queueUrls[$queueName] = $queueUrl;
         }
 
-        return $this->queueUrls[$queueName];
+        // The queue URL request failed or did not return a result
+        throw new InvalidArgumentException(sprintf('The queue "%s" does not exist', $queueName));
     }
 }

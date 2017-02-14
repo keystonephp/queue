@@ -130,7 +130,7 @@ class Consumer
         }
 
         // When the queue is empty then wait before polling again
-        $this->wait = ($envelope === null);
+        $this->wait = !isset($envelope);
 
         return true;
     }

@@ -7,6 +7,7 @@ namespace Keystone\Queue\Driver\Sqs\Middleware;
 use Exception;
 use Keystone\Queue\Delegate;
 use Keystone\Queue\Driver\Sqs\SqsDriver;
+use Keystone\Queue\Driver\Sqs\SqsEnvelope;
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Message;
 use Keystone\Queue\Message\RetryableMessage;
@@ -77,15 +78,15 @@ class RetryMiddleware implements Middleware
     }
 
     /**
-     * @param Envelope $envelope
+     * @param SqsEnvelope $envelope
      */
-    private function extendVisibility(Envelope $envelope)
+    private function extendVisibility(SqsEnvelope $envelope)
     {
         // Calculate the retry delay
         $delay = $this->strategy->getDelay($envelope->getAttempts());
 
         // The maximum visibility timeout is 12 hours for the lifetime of the message
-        $maxVisibilityTimeout = (int) self::MAX_VISIBILITY_TIMEOUT - (time() - ($envelope->getFirstReceiveTimestamp() / 1000)) - 1;
+        $maxVisibilityTimeout = self::MAX_VISIBILITY_TIMEOUT - (time() - $envelope->getFirstReceiveTimestamp()) - 1;
 
         // Change the visibility timeout for the message
         $this->driver->changeVisibility($envelope, min($maxVisibilityTimeout, $delay));
