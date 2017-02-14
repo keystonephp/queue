@@ -31,8 +31,6 @@ class RetryMiddleware implements Middleware
      */
     private $strategy;
 
-    private $startTime;
-
     /**
      * @param SqsDriver $driver
      * @param RetryStrategy $strategy
@@ -48,8 +46,6 @@ class RetryMiddleware implements Middleware
      */
     public function process(Envelope $envelope, Delegate $delegate): bool
     {
-        $this->startTime = time();
-
         try {
             return $delegate->process($envelope);
         } catch (Exception $exception) {
