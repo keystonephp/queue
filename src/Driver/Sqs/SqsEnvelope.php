@@ -49,6 +49,7 @@ class SqsEnvelope extends Envelope
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     public function hasAttribute(string $name): bool
@@ -58,6 +59,7 @@ class SqsEnvelope extends Envelope
 
     /**
      * @param string $name
+     *
      * @return string
      */
     public function getAttribute(string $name): string
