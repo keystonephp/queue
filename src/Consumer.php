@@ -47,7 +47,7 @@ class Consumer
     /**
      * @var bool
      */
-    private $wait = false;
+    private $waiting = false;
 
     /**
      * @param Provider $provider
@@ -130,7 +130,7 @@ class Consumer
         }
 
         // When the queue is empty then wait before polling again
-        $this->wait = !isset($envelope);
+        $this->waiting = !isset($envelope);
 
         return true;
     }
@@ -148,7 +148,7 @@ class Consumer
             }
         }
 
-        if ($this->wait) {
+        if ($this->waiting) {
             // Sleep between queue polls when the queue is empty
             usleep($this->interval * 1000000);
         }
