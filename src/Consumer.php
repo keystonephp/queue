@@ -45,6 +45,11 @@ class Consumer
     private $interval;
 
     /**
+     * @var bool
+     */
+    private $wait = false;
+
+    /**
      * @param Provider $provider
      * @param Router $router
      * @param LoggerInterface $logger
@@ -122,6 +127,9 @@ class Consumer
             }
         }
 
+        // When the queue is empty then wait before polling again
+        $this->wait = ($envelope === null);
+
         return true;
     }
 
@@ -138,8 +146,10 @@ class Consumer
             }
         }
 
-        // Sleep between queue polls (converted to microseconds from seconds)
-        usleep($this->interval * 1000000);
+        if ($this->wait) {
+            // Sleep between queue polls when the queue is empty
+            usleep($this->interval * 1000000);
+        }
 
         return true;
     }
