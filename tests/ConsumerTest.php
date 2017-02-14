@@ -9,10 +9,10 @@ use Keystone\Queue\Middleware\MaxMessagesMiddleware;
 use Keystone\Queue\Provider\FakeProvider;
 use Keystone\Queue\Router\SimpleRouter;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 
-class ConsumerTest extends TestCase
+class ConsumerTest extends MockeryTestCase
 {
     public function testConsume()
     {

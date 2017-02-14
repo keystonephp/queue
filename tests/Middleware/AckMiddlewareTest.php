@@ -11,11 +11,11 @@ use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware;
 use Keystone\Queue\Provider;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 use Throwable;
 
-class AckMiddlewareTest extends TestCase
+class AckMiddlewareTest extends MockeryTestCase
 {
     private $provider;
     private $middleware;

@@ -8,10 +8,10 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Exception\RoutingException;
 use Keystone\Queue\Message\SimpleMessage;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class SymfonyContainerRouterTest extends TestCase
+class SymfonyContainerRouterTest extends MockeryTestCase
 {
     private $container;
 
@@ -29,7 +29,8 @@ class SymfonyContainerRouterTest extends TestCase
             ->with('worker')
             ->andReturn(true);
 
-        $worker = Mockery::mock();
+        $worker = new class() {
+        };
         $this->container->shouldReceive('get')
             ->with('worker')
             ->andReturn($worker);

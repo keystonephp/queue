@@ -8,10 +8,10 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Exception\RoutingException;
 use Keystone\Queue\Message\SimpleMessage;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class PsrContainerRouterTest extends TestCase
+class PsrContainerRouterTest extends MockeryTestCase
 {
     private $container;
 

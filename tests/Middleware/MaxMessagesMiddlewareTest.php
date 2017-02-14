@@ -9,10 +9,10 @@ use Keystone\Queue\Envelope;
 use Keystone\Queue\Message\SimpleMessage;
 use Keystone\Queue\Middleware;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 
-class MaxMessagesMiddlewareTest extends TestCase
+class MaxMessagesMiddlewareTest extends MockeryTestCase
 {
     private $middleware;
 

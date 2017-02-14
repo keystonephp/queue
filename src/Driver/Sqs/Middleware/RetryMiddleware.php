@@ -22,11 +22,6 @@ use Throwable;
 class RetryMiddleware implements Middleware
 {
     /**
-     * The maximum visibility timeout (12 hours).
-     */
-    const MAX_VISIBILITY_TIMEOUT = 43200;
-
-    /**
      * @var SqsDriver
      */
     private $driver;
@@ -86,10 +81,10 @@ class RetryMiddleware implements Middleware
         $delay = $this->strategy->getDelay($envelope->getAttempts());
 
         // The maximum visibility timeout is 12 hours for the lifetime of the message
-        $maxVisibilityTimeout = self::MAX_VISIBILITY_TIMEOUT - (time() - $envelope->getFirstReceiveTimestamp()) - 1;
+        $maxVisibilityTimeout = SqsDriver::MAX_VISIBILITY_TIMEOUT - (time() - $envelope->getFirstReceiveTimestamp()) - 1;
 
         // Change the visibility timeout for the message
-        $this->driver->changeVisibility($envelope, min($maxVisibilityTimeout, $delay));
+        $this->driver->changeVisibility($envelope, $maxVisibilityTimeout);
 
         // Mark the message as requeued so it is not deleted
         $envelope->requeue();

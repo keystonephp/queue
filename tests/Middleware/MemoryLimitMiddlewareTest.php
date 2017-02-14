@@ -8,10 +8,10 @@ use Keystone\Queue\Delegate;
 use Keystone\Queue\Envelope;
 use Keystone\Queue\Message\SimpleMessage;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 
-class MemoryLimitMiddlewareTest extends TestCase
+class MemoryLimitMiddlewareTest extends MockeryTestCase
 {
     public function testBelowMemoryLimit()
     {

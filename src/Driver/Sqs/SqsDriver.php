@@ -18,6 +18,11 @@ use Psr\Log\LoggerInterface;
 class SqsDriver implements Provider, Publisher
 {
     /**
+     * The maximum visibility timeout (12 hours).
+     */
+    const MAX_VISIBILITY_TIMEOUT = 43200;
+
+    /**
      * @var SqsClient
      */
     private $client;
@@ -161,7 +166,7 @@ class SqsDriver implements Provider, Publisher
         $this->client->changeMessageVisibility([
             'QueueUrl' => $this->resolveQueueUrl($envelope->getQueueName()),
             'ReceiptHandle' => $envelope->getReceipt(),
-            'VisibilityTimeout' => $visibilityTimeout,
+            'VisibilityTimeout' => min(static::MAX_VISIBILITY_TIMEOUT, $visibilityTimeout),
         ]);
     }
 
